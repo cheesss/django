@@ -1,0 +1,57 @@
+from django.shortcuts import HttpResponse
+from django.views.decorators.csrf import csrf_exempt
+intro = [
+{'id':1,'title':'address','body': 'bangwha'},
+{'id':2,'title':'age', 'body':'21',},
+{'id':3,'title':'hobby', 'body':'stock'},
+]
+
+def html_template(articletag):
+    global intro        #전역변수 선언
+    ol = ''
+    for info in intro:
+        ol += f'<li><a href="/read/{info["id"]}">{info["title"]}</a></li>'
+    return f'''
+    <html>
+        <body>
+            <h1>cho hyun joon</h1>
+            <ol>
+                {ol}
+            </ol>
+            </ol>
+            {articletag}
+            <ul>
+                <li><a href="/create/">create</a></li>
+
+
+            </ul>
+        <body>
+    </html>
+    '''
+def index(request): 
+    article ='''
+    <h2> hi </h2>
+    hi im cho
+    '''
+    return HttpResponse(html_template(article))
+
+def read(request, id):
+    global intro
+    article =''
+    for info in intro:
+        if info['id'] == int(id):
+            article = f'<h2>{info["title"]}</h2>'
+            {info["body"]}
+    return HttpResponse('read'+id)
+
+@csrf_exempt
+def create(request):
+    article ='''
+        <form action="/create/" method="post">
+            <input type="text" name="title" placeholder="title">
+            <p><textarea name="bodey" placeholder="body"></textarea></p>
+            <p><input type="submit"></p>
+        </form>
+    '''
+
+    return HttpResponse(html_template(article))
